@@ -16,6 +16,8 @@
   --greenSoft:#eafff1;
   --red:#e63946;
   --redSoft:#fff0f1;
+  --blue:#4facfe;
+  --blueSoft:#eef7ff;
 }
 *{box-sizing:border-box}
 body{
@@ -85,6 +87,35 @@ select,button.small{
   padding:10px 12px;
   font-size:15px;
 }
+.rangeBox{
+  background:var(--blueSoft);
+  border:2px solid #cfe9ff;
+  border-radius:16px;
+  padding:10px;
+  margin-bottom:12px;
+}
+.rangeTitle{
+  font-size:16px;
+  font-weight:1000;
+  color:#246fa8;
+  margin-bottom:8px;
+  text-align:center;
+}
+.rangeRow{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+.rangeBtn{
+  border:none;
+  border-radius:14px;
+  padding:12px 8px;
+  background:#4facfe;
+  color:white;
+  font-size:16px;
+  font-weight:1000;
+  cursor:pointer;
+}
 .parentModeBtn{
   width:100%;
   border:none;
@@ -108,7 +139,7 @@ select,button.small{
   display:none;
   gap:8px;
   align-items:center;
-  justify-content:space-between;
+  justify-content:flex-end;
   flex-wrap:wrap;
   background:#fff8ef;
   border:2px solid #ffd6a4;
@@ -118,11 +149,6 @@ select,button.small{
 }
 body.parentMode .parentBar{
   display:flex;
-}
-.parentTitle{
-  font-weight:1000;
-  color:#c25b00;
-  font-size:17px;
 }
 .counts{
   display:flex;
@@ -160,6 +186,11 @@ body.parentMode .parentBar{
   background:#fff3e6;
   border-color:#ff9f43;
   box-shadow:0 0 0 3px rgba(255,159,67,.18);
+}
+.numBtn.playing{
+  background:#eef7ff;
+  border-color:#4facfe;
+  box-shadow:0 0 0 3px rgba(79,172,254,.22);
 }
 .numBtn .n{
   font-size:30px;
@@ -225,6 +256,9 @@ body.parentMode .scoreBox{
     grid-template-columns:repeat(5,1fr);
     gap:8px;
   }
+  .rangeRow{
+    grid-template-columns:repeat(2,1fr);
+  }
   .numBtn{min-height:72px}
   .numBtn .n{font-size:27px}
   .numBtn .w{font-size:12px}
@@ -256,10 +290,19 @@ body.parentMode .scoreBox{
       <button class="small" onclick="clearScores()">清除評分</button>
     </div>
 
+    <div class="rangeBox">
+      <div class="rangeTitle">連續英文發音</div>
+      <div class="rangeRow">
+        <button class="rangeBtn" onclick="playRange(1,10)">1-10</button>
+        <button class="rangeBtn" onclick="playRange(11,20)">11-20</button>
+        <button class="rangeBtn" onclick="playRange(21,30)">21-30</button>
+        <button class="rangeBtn" onclick="playRange(31,40)">31-40</button>
+      </div>
+    </div>
+
     <button id="parentModeBtn" class="parentModeBtn" onclick="toggleParentMode()">👨‍👩‍👧 家長評分模式：關閉</button>
 
     <div class="parentBar">
-      <div class="parentTitle">開啟後：點 <span class="goodText">⭕ 綠色＝答對</span>，點 <span class="badText">❌ 紅色＝答錯</span>；❌ 會唸「析楓加油唷」</div>
       <div class="counts">
         <div class="countChip goodText">⭕ <span id="goodCount">0</span></div>
         <div class="countChip badText">❌ <span id="badCount">0</span></div>
@@ -267,518 +310,586 @@ body.parentMode .scoreBox{
     </div>
 
     <div class="grid">
+
       <div class="numCard" data-num="1">
         <button class="numBtn" data-en="one" data-zh="一" onclick="speakNumber(this,1)">
           <div class="n">1</div>
           <div class="w">one</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,1,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,1,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(1,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(1,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="2">
         <button class="numBtn" data-en="two" data-zh="二" onclick="speakNumber(this,2)">
           <div class="n">2</div>
           <div class="w">two</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,2,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,2,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(2,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(2,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="3">
         <button class="numBtn" data-en="three" data-zh="三" onclick="speakNumber(this,3)">
           <div class="n">3</div>
           <div class="w">three</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,3,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,3,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(3,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(3,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="4">
         <button class="numBtn" data-en="four" data-zh="四" onclick="speakNumber(this,4)">
           <div class="n">4</div>
           <div class="w">four</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,4,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,4,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(4,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(4,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="5">
         <button class="numBtn" data-en="five" data-zh="五" onclick="speakNumber(this,5)">
           <div class="n">5</div>
           <div class="w">five</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,5,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,5,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(5,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(5,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="6">
         <button class="numBtn" data-en="six" data-zh="六" onclick="speakNumber(this,6)">
           <div class="n">6</div>
           <div class="w">six</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,6,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,6,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(6,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(6,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="7">
         <button class="numBtn" data-en="seven" data-zh="七" onclick="speakNumber(this,7)">
           <div class="n">7</div>
           <div class="w">seven</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,7,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,7,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(7,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(7,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="8">
         <button class="numBtn" data-en="eight" data-zh="八" onclick="speakNumber(this,8)">
           <div class="n">8</div>
           <div class="w">eight</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,8,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,8,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(8,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(8,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="9">
         <button class="numBtn" data-en="nine" data-zh="九" onclick="speakNumber(this,9)">
           <div class="n">9</div>
           <div class="w">nine</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,9,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,9,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(9,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(9,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="10">
         <button class="numBtn" data-en="ten" data-zh="十" onclick="speakNumber(this,10)">
           <div class="n">10</div>
           <div class="w">ten</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,10,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,10,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(10,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(10,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="11">
         <button class="numBtn" data-en="eleven" data-zh="十一" onclick="speakNumber(this,11)">
           <div class="n">11</div>
           <div class="w">eleven</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,11,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,11,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(11,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(11,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="12">
         <button class="numBtn" data-en="twelve" data-zh="十二" onclick="speakNumber(this,12)">
           <div class="n">12</div>
           <div class="w">twelve</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,12,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,12,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(12,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(12,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="13">
         <button class="numBtn" data-en="thirteen" data-zh="十三" onclick="speakNumber(this,13)">
           <div class="n">13</div>
           <div class="w">thirteen</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,13,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,13,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(13,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(13,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="14">
         <button class="numBtn" data-en="fourteen" data-zh="十四" onclick="speakNumber(this,14)">
           <div class="n">14</div>
           <div class="w">fourteen</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,14,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,14,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(14,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(14,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="15">
         <button class="numBtn" data-en="fifteen" data-zh="十五" onclick="speakNumber(this,15)">
           <div class="n">15</div>
           <div class="w">fifteen</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,15,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,15,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(15,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(15,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="16">
         <button class="numBtn" data-en="sixteen" data-zh="十六" onclick="speakNumber(this,16)">
           <div class="n">16</div>
           <div class="w">sixteen</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,16,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,16,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(16,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(16,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="17">
         <button class="numBtn" data-en="seventeen" data-zh="十七" onclick="speakNumber(this,17)">
           <div class="n">17</div>
           <div class="w">seventeen</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,17,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,17,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(17,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(17,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="18">
         <button class="numBtn" data-en="eighteen" data-zh="十八" onclick="speakNumber(this,18)">
           <div class="n">18</div>
           <div class="w">eighteen</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,18,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,18,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(18,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(18,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="19">
         <button class="numBtn" data-en="nineteen" data-zh="十九" onclick="speakNumber(this,19)">
           <div class="n">19</div>
           <div class="w">nineteen</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,19,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,19,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(19,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(19,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="20">
         <button class="numBtn" data-en="twenty" data-zh="二十" onclick="speakNumber(this,20)">
           <div class="n">20</div>
           <div class="w">twenty</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,20,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,20,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(20,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(20,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="21">
         <button class="numBtn" data-en="twenty-one" data-zh="二十一" onclick="speakNumber(this,21)">
           <div class="n">21</div>
           <div class="w">twenty-one</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,21,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,21,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(21,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(21,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="22">
         <button class="numBtn" data-en="twenty-two" data-zh="二十二" onclick="speakNumber(this,22)">
           <div class="n">22</div>
           <div class="w">twenty-two</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,22,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,22,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(22,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(22,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="23">
         <button class="numBtn" data-en="twenty-three" data-zh="二十三" onclick="speakNumber(this,23)">
           <div class="n">23</div>
           <div class="w">twenty-three</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,23,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,23,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(23,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(23,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="24">
         <button class="numBtn" data-en="twenty-four" data-zh="二十四" onclick="speakNumber(this,24)">
           <div class="n">24</div>
           <div class="w">twenty-four</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,24,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,24,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(24,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(24,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="25">
         <button class="numBtn" data-en="twenty-five" data-zh="二十五" onclick="speakNumber(this,25)">
           <div class="n">25</div>
           <div class="w">twenty-five</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,25,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,25,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(25,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(25,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="26">
         <button class="numBtn" data-en="twenty-six" data-zh="二十六" onclick="speakNumber(this,26)">
           <div class="n">26</div>
           <div class="w">twenty-six</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,26,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,26,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(26,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(26,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="27">
         <button class="numBtn" data-en="twenty-seven" data-zh="二十七" onclick="speakNumber(this,27)">
           <div class="n">27</div>
           <div class="w">twenty-seven</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,27,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,27,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(27,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(27,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="28">
         <button class="numBtn" data-en="twenty-eight" data-zh="二十八" onclick="speakNumber(this,28)">
           <div class="n">28</div>
           <div class="w">twenty-eight</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,28,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,28,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(28,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(28,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="29">
         <button class="numBtn" data-en="twenty-nine" data-zh="二十九" onclick="speakNumber(this,29)">
           <div class="n">29</div>
           <div class="w">twenty-nine</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,29,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,29,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(29,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(29,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="30">
         <button class="numBtn" data-en="thirty" data-zh="三十" onclick="speakNumber(this,30)">
           <div class="n">30</div>
           <div class="w">thirty</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,30,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,30,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(30,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(30,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="31">
         <button class="numBtn" data-en="thirty-one" data-zh="三十一" onclick="speakNumber(this,31)">
           <div class="n">31</div>
           <div class="w">thirty-one</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,31,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,31,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(31,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(31,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="32">
         <button class="numBtn" data-en="thirty-two" data-zh="三十二" onclick="speakNumber(this,32)">
           <div class="n">32</div>
           <div class="w">thirty-two</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,32,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,32,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(32,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(32,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="33">
         <button class="numBtn" data-en="thirty-three" data-zh="三十三" onclick="speakNumber(this,33)">
           <div class="n">33</div>
           <div class="w">thirty-three</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,33,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,33,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(33,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(33,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="34">
         <button class="numBtn" data-en="thirty-four" data-zh="三十四" onclick="speakNumber(this,34)">
           <div class="n">34</div>
           <div class="w">thirty-four</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,34,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,34,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(34,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(34,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="35">
         <button class="numBtn" data-en="thirty-five" data-zh="三十五" onclick="speakNumber(this,35)">
           <div class="n">35</div>
           <div class="w">thirty-five</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,35,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,35,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(35,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(35,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="36">
         <button class="numBtn" data-en="thirty-six" data-zh="三十六" onclick="speakNumber(this,36)">
           <div class="n">36</div>
           <div class="w">thirty-six</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,36,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,36,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(36,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(36,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="37">
         <button class="numBtn" data-en="thirty-seven" data-zh="三十七" onclick="speakNumber(this,37)">
           <div class="n">37</div>
           <div class="w">thirty-seven</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,37,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,37,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(37,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(37,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="38">
         <button class="numBtn" data-en="thirty-eight" data-zh="三十八" onclick="speakNumber(this,38)">
           <div class="n">38</div>
           <div class="w">thirty-eight</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,38,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,38,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(38,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(38,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="39">
         <button class="numBtn" data-en="thirty-nine" data-zh="三十九" onclick="speakNumber(this,39)">
           <div class="n">39</div>
           <div class="w">thirty-nine</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,39,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,39,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(39,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(39,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="40">
         <button class="numBtn" data-en="forty" data-zh="四十" onclick="speakNumber(this,40)">
           <div class="n">40</div>
           <div class="w">forty</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,40,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,40,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(40,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(40,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="41">
         <button class="numBtn" data-en="forty-one" data-zh="四十一" onclick="speakNumber(this,41)">
           <div class="n">41</div>
           <div class="w">forty-one</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,41,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,41,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(41,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(41,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="42">
         <button class="numBtn" data-en="forty-two" data-zh="四十二" onclick="speakNumber(this,42)">
           <div class="n">42</div>
           <div class="w">forty-two</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,42,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,42,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(42,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(42,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="43">
         <button class="numBtn" data-en="forty-three" data-zh="四十三" onclick="speakNumber(this,43)">
           <div class="n">43</div>
           <div class="w">forty-three</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,43,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,43,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(43,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(43,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="44">
         <button class="numBtn" data-en="forty-four" data-zh="四十四" onclick="speakNumber(this,44)">
           <div class="n">44</div>
           <div class="w">forty-four</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,44,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,44,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(44,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(44,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="45">
         <button class="numBtn" data-en="forty-five" data-zh="四十五" onclick="speakNumber(this,45)">
           <div class="n">45</div>
           <div class="w">forty-five</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,45,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,45,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(45,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(45,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="46">
         <button class="numBtn" data-en="forty-six" data-zh="四十六" onclick="speakNumber(this,46)">
           <div class="n">46</div>
           <div class="w">forty-six</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,46,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,46,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(46,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(46,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="47">
         <button class="numBtn" data-en="forty-seven" data-zh="四十七" onclick="speakNumber(this,47)">
           <div class="n">47</div>
           <div class="w">forty-seven</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,47,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,47,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(47,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(47,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="48">
         <button class="numBtn" data-en="forty-eight" data-zh="四十八" onclick="speakNumber(this,48)">
           <div class="n">48</div>
           <div class="w">forty-eight</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,48,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,48,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(48,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(48,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="49">
         <button class="numBtn" data-en="forty-nine" data-zh="四十九" onclick="speakNumber(this,49)">
           <div class="n">49</div>
           <div class="w">forty-nine</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,49,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,49,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(49,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(49,'bad')">❌</button>
         </div>
       </div>
+
       <div class="numCard" data-num="50">
         <button class="numBtn" data-en="fifty" data-zh="五十" onclick="speakNumber(this,50)">
           <div class="n">50</div>
           <div class="w">fifty</div>
         </button>
         <div class="scoreBox">
-          <button class="scoreBtn goodPick" onclick="setScore(this,50,'good')">⭕</button>
-          <button class="scoreBtn badPick" onclick="setScore(this,50,'bad')">❌</button>
+          <button class="scoreBtn goodPick" onclick="setScore(50,'good')">⭕</button>
+          <button class="scoreBtn badPick" onclick="setScore(50,'bad')">❌</button>
         </div>
       </div>
     </div>
 
-    <div class="footer">先選「念英文」或「念中文」，再點數字朗讀。評分會自動記憶。</div>
+    <div class="footer">一般模式可選念英文/念中文；家長模式固定先中文再英文。</div>
   </div>
 </div>
 
 <script>
 var speakMode = "en";
-var lastBtn = null;
-var lastNum = null;
-var STORAGE_KEY = "number_voice_score_1_50_v3";
-var PARENT_MODE_KEY = "number_voice_parent_mode_v1";
+var STORAGE_KEY = "number_voice_score_1_50_v9";
+var PARENT_MODE_KEY = "number_voice_parent_mode_v2";
+var playQueue = [];
+var isPlayingRange = false;
+
+var goodMsgs = [
+  "析楓好棒，答對了",
+  "析楓答對了，好厲害",
+  "析楓太棒了",
+  "析楓做得很好",
+  "析楓真棒，答對了"
+];
+
+var badMsgs = [
+  "析楓加油唷",
+  "析楓再試一次",
+  "析楓快成功了",
+  "析楓差一點點",
+  "析楓你可以的",
+  "析楓再想一下",
+  "析楓很努力，再來一次"
+];
 
 function loadScores(){
   try {
@@ -790,6 +901,87 @@ function loadScores(){
 
 function saveScores(scores){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
+}
+
+function randomPick(arr){
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function makeUtterance(text, lang, rate){
+  var msg = new SpeechSynthesisUtterance(text);
+  msg.lang = lang;
+  msg.rate = rate || 0.9;
+  msg.pitch = 1;
+  return msg;
+}
+
+function clearPlayingHighlight(){
+  var all = document.querySelectorAll(".numBtn");
+  for(var i=0;i<all.length;i++){
+    all[i].classList.remove("playing");
+  }
+}
+
+function highlightNumber(n, cls){
+  var btn = document.querySelector('.numCard[data-num="' + n + '"] .numBtn');
+  if(btn){
+    btn.classList.add(cls || "active");
+  }
+}
+
+function speakText(text, lang, rate){
+  try {
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(makeUtterance(text, lang, rate));
+  } catch(e) {}
+}
+
+function speakParentNumber(n, enWord){
+  try {
+    window.speechSynthesis.cancel();
+
+    var zhMsg = makeUtterance("數字" + n, "zh-TW", 0.9);
+    var enMsg = makeUtterance(enWord, "en-US", 0.9);
+
+    zhMsg.onend = function(){
+      window.speechSynthesis.speak(enMsg);
+    };
+
+    window.speechSynthesis.speak(zhMsg);
+  } catch(e) {}
+}
+
+function playRange(start, end){
+  stopSpeak();
+  isPlayingRange = true;
+  playQueue = [];
+  for(var i=start;i<=end;i++) playQueue.push(i);
+  playNextInRange();
+}
+
+function playNextInRange(){
+  if(!isPlayingRange || playQueue.length === 0){
+    isPlayingRange = false;
+    clearPlayingHighlight();
+    return;
+  }
+
+  var n = playQueue.shift();
+  clearPlayingHighlight();
+  highlightNumber(n, "playing");
+
+  var btn = document.querySelector('.numCard[data-num="' + n + '"] .numBtn');
+  var word = btn ? btn.getAttribute("data-en") : "";
+
+  try {
+    var msg = makeUtterance(word, "en-US", parseFloat(document.getElementById("rate").value || "0.9"));
+    msg.onend = function(){
+      setTimeout(playNextInRange, 60);
+    };
+    window.speechSynthesis.speak(msg);
+  } catch(e) {
+    isPlayingRange = false;
+  }
 }
 
 function toggleParentMode(){
@@ -826,7 +1018,7 @@ function applyScores(){
   updateCounts();
 }
 
-function setScore(btn,n,score){
+function setScore(n, score){
   var scores = loadScores();
   var now = scores[n] || "";
 
@@ -839,20 +1031,13 @@ function setScore(btn,n,score){
   saveScores(scores);
   applyScores();
 
-  if(score === "bad" && scores[n] === "bad"){
-    speakEncourage();
+  if(score === "good" && scores[n] === "good"){
+    speakText(randomPick(goodMsgs), "zh-TW", 0.9);
   }
-}
 
-function speakEncourage(){
-  try {
-    window.speechSynthesis.cancel();
-    var msg = new SpeechSynthesisUtterance("析楓加油唷");
-    msg.lang = "zh-TW";
-    msg.rate = 0.9;
-    msg.pitch = 1;
-    window.speechSynthesis.speak(msg);
-  } catch(e) {}
+  if(score === "bad" && scores[n] === "bad"){
+    speakText(randomPick(badMsgs), "zh-TW", 0.9);
+  }
 }
 
 function updateCounts(){
@@ -878,20 +1063,13 @@ function setMode(mode){
   speakMode = mode;
   document.getElementById("enBtn").classList.toggle("active", mode === "en");
   document.getElementById("zhBtn").classList.toggle("active", mode === "zh");
-
-  if(lastBtn && lastNum){
-    speakNumber(lastBtn, lastNum);
-  }
 }
 
 function speakNumber(btn,n){
+  stopSpeak();
+
   var en = btn.getAttribute("data-en");
   var zh = btn.getAttribute("data-zh");
-  var text = speakMode === "en" ? en : zh;
-  var lang = speakMode === "en" ? "en-US" : "zh-TW";
-
-  lastBtn = btn;
-  lastNum = n;
 
   var all = document.querySelectorAll(".numBtn");
   for(var i=0;i<all.length;i++){
@@ -899,20 +1077,20 @@ function speakNumber(btn,n){
   }
   btn.classList.add("active");
 
-  try {
-    window.speechSynthesis.cancel();
-    var msg = new SpeechSynthesisUtterance(text);
-    msg.lang = lang;
-    msg.rate = parseFloat(document.getElementById("rate").value || "0.9");
-    msg.pitch = 1;
-    window.speechSynthesis.speak(msg);
-  } catch(e) {
-    alert("這個瀏覽器不支援語音朗讀，請用 Safari 或 Chrome 開啟。");
+  if(document.body.classList.contains("parentMode")){
+    speakParentNumber(n, en);
+  }else{
+    var text = speakMode === "en" ? (n + " " + en) : (n + " " + zh);
+    var lang = speakMode === "en" ? "en-US" : "zh-TW";
+    speakText(text, lang, parseFloat(document.getElementById("rate").value || "0.9"));
   }
 }
 
 function stopSpeak(){
   try {
+    isPlayingRange = false;
+    playQueue = [];
+    clearPlayingHighlight();
     window.speechSynthesis.cancel();
   } catch(e) {}
 }
